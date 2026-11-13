@@ -1,0 +1,36 @@
+# ============================================================
+# Contract document rule pack
+# ============================================================
+# Applied when document type == "contract".
+# Supplements common.yaml with contract numbers, party IDs,
+# tax IDs and legal entity patterns.
+
+id: contract
+
+patterns:
+  - id: contract_number
+    label: CASE_NUMBER
+    regex: '(?i)\b(?:contract|agreement|ref(?:erence)?)\s*(?:no\.?|number|#)[:\s]*([A-Z0-9\-\/]{4,20})\b'
+    group: 1
+    score: 0.90
+
+  - id: ein_tax_id
+    label: ID_NUMBER
+    regex: '\b\d{2}-\d{7}\b'
+    group: 0
+    score: 0.80
+
+  - id: effective_date
+    label: DATE
+    regex: '(?i)\b(?:effective|execution|signing|commencement)\s+date[:\s]+([A-Za-z]+\s+\d{1,2},\s+(?:19|20)\d{2}|\d{1,2}[\/\-]\d{1,2}[\/\-](?:19|20)\d{2})\b'
+    group: 1
+    score: 0.85
+    validator: date_validator
+
+  - id: party_signatory
+    label: PERSON
+    regex: '(?i)\b(?:signed\s+by|executed\s+by|signature\s+of)[:\s]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3})'
+    group: 1
+    score: 0.70
+
+title_cues: ["Party", "Contractor", "Client", "Vendor", "Licensor", "Licensee", "Signatory"]

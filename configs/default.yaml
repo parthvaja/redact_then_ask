@@ -1,0 +1,119 @@
+# ============================================================
+# Redact-Then-Ask — default configuration
+# ============================================================
+# All tuneable parameters live here.  Code reads them through
+# rta.config.  Never hard-code these values in source files.
+
+seed: 13
+
+paths:
+  data:    data
+  models:  models
+  reports: reports
+  cache:   data/cache
+
+# ------------------------------------------------------------
+# Language identification  (rta.langid)
+# ------------------------------------------------------------
+langid:
+  candidates: [en, es, fr, de, hi, gu]
+  min_conf: 0.5          # below this → warn + set unsupported_language=True
+
+# ------------------------------------------------------------
+# Document classification  (rta.classify)
+# ------------------------------------------------------------
+classify:
+  model: tfidf_lr
+  path: models/classifier/tfidf_lr.joblib
+  labels: [resume, contract, medical, email, court_case]
+  tfidf:
+    ngram_range: [1, 2]
+    min_df: 2
+    sublinear_tf: true
+    max_features: 50000
+  logistic_regression:
+    C: 4
+    max_iter: 2000
+    solver: lbfgs
+    multi_class: multinomial
+
+# ------------------------------------------------------------
+# Rule routing  (rta.detect.rules)
+# ------------------------------------------------------------
+routing:
+  min_conf: 0.6          # below this → apply top-2 packs (recall first)
+  fallback_top_k: 2
+  rule_dir: configs/rules
+
+# ------------------------------------------------------------
+# Detection — regex  (rta.detect.regex)
+# ------------------------------------------------------------
+detect:
+  regex:
+    enabled: true
+    keep_unvalidated: false   # drop hits that fail their validator
+
+  # Detection — NER  (rta.detect.ner)
+  ner:
+    backend: spacy           # "spacy" | "hf"
+    spacy_model: en_core_web_trf
+    spacy_model_cpu: en_core_web_lg   # used when trf is unavailable
+    hf_model: dslim/bert-base-NER     # fallback HF model
+    window_tokens: 400
+    stride: 100
+    min_score: 0.4            # drop NER spans below this confidence
+
+# ------------------------------------------------------------
+# Span resolution  (rta.resolve)
+# ------------------------------------------------------------
+resolve:
+  min_score: 0.35
+  # Label precedence: earlier label wins in a same-span conflict.
+  # Must match taxonomy.LABEL_PRECEDENCE.
+  precedence:
+    - SSN
+    - CREDIT_CARD
+    - IBAN
+    - ID_NUMBER
+    - MRN
+    - CASE_NUMBER
+    - PHONE
+    - EMAIL
+    - ADDRESS
+    - PERSON
+    - ORG
+    - LOCATION
+    - IP_ADDRESS
+    - URL
+    - DATE
+    - AGE
+
+# ------------------------------------------------------------
+# Redaction  (rta.redact)
+# ------------------------------------------------------------
+redact:
+  mode: placeholder          # "mask" | "placeholder" | "fake"
+  fuzzy_threshold: 90        # rapidfuzz token_set_ratio threshold for clustering
+
+# ------------------------------------------------------------
+# RAG chat  (rta.rag)
+# ------------------------------------------------------------
+rag:
+  chunk_chars: 800
+  overlap: 150
+  embed_model: sentence-transformers/all-MiniLM-L6-v2
+  top_k: 4
+  bm25_hybrid: false         # enable BM25 re-ranking (SHOULD)
+  llm:
+    host: http://localhost:11434
+    model: qwen2.5:7b-instruct
+    temperature: 0.1
+    num_ctx: 4096
+
+# ------------------------------------------------------------
+# Evaluation  (rta.eval)
+# ------------------------------------------------------------
+eval:
+  matching: overlap          # "strict" | "overlap" | "token"
+  bootstrap_n: 1000
+  bootstrap_seed: 13

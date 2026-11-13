@@ -1,0 +1,2 @@
+{"qa_id": "med_01_q1", "doc_id": "med_01", "question": "Which medication was the patient prescribed?", "answer": "", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "med_01_q2", "doc_id": "med_01", "question": "Who is the treating physician?", "answer": "", "answer_type": "pii_dependent", "notes": ""}

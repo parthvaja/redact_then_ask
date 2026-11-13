@@ -1,0 +1,49 @@
+# ============================================================
+# Court case / legal document rule pack
+# ============================================================
+# Applied when document type == "court_case".
+# Supplements common.yaml with case numbers, docket IDs,
+# court dates and legal party identifiers.
+
+id: court_case
+
+patterns:
+  - id: case_number_cv
+    label: CASE_NUMBER
+    regex: '(?i)\b(?:case\s+no\.?|docket\s+no\.?|case\s+number)[:\s]*(\d{2,4}-[A-Z]{1,4}-\d{3,7}(?:-[A-Z0-9]+)?)\b'
+    group: 1
+    score: 0.95
+
+  - id: case_number_bare
+    label: CASE_NUMBER
+    regex: '\b\d{2,4}-(?:CV|CR|CA|MC|SC|BK)-\d{4,7}(?:-[A-Z]{1,3})?\b'
+    group: 0
+    score: 0.90
+
+  - id: echr_application_number
+    label: CASE_NUMBER
+    regex: '\b(?:Application\s+(?:No\.?|Number)[:\s]*)(\d{3,6}/\d{2,4})\b'
+    group: 1
+    score: 0.90
+
+  - id: hearing_date
+    label: DATE
+    regex: '(?i)\b(?:heard|decided|filed|entered|ordered)\s+(?:on\s+)?([A-Za-z]+\s+\d{1,2},\s+(?:19|20)\d{2}|\d{1,2}[\/\-]\d{1,2}[\/\-](?:19|20)\d{2})\b'
+    group: 1
+    score: 0.85
+    validator: date_validator
+
+  - id: party_v
+    label: PERSON
+    regex: '(?i)\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})\s+v(?:ersus|s?)\.?\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})\b'
+    group: 1
+    score: 0.70
+
+  - id: bar_number
+    label: ID_NUMBER
+    regex: '(?i)\bbar\s+(?:no\.?|number)[:\s]*([A-Z]?\d{4,8})\b'
+    group: 1
+    score: 0.85
+
+title_cues: ["Plaintiff", "Defendant", "Appellant", "Appellee", "Petitioner",
+             "Respondent", "Counsel", "Your Honor", "Court", "Judge", "v."]

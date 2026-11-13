@@ -1,0 +1,50 @@
+# ============================================================
+# Medical document rule pack
+# ============================================================
+# Applied when document type == "medical".
+# Supplements common.yaml with MRN, insurance IDs and
+# medical-context identifiers.
+
+id: medical
+
+patterns:
+  - id: mrn_keyword
+    label: MRN
+    regex: '(?i)\b(?:MRN|medical\s+record\s+(?:no\.?|number|#))[:\s#]*([A-Z0-9\-]{5,12})\b'
+    group: 1
+    score: 0.95
+
+  - id: mrn_bare
+    label: MRN
+    regex: '(?i)\bpatient\s+(?:id|number|no\.?)[:\s#]*([A-Z0-9\-]{5,12})\b'
+    group: 1
+    score: 0.85
+
+  - id: insurance_member_id
+    label: ID_NUMBER
+    regex: '(?i)\b(?:member|policy|insurance)\s+(?:id|no\.?|number)[:\s#]*([A-Z0-9]{6,15})\b'
+    group: 1
+    score: 0.90
+
+  - id: npi_number
+    label: ID_NUMBER
+    regex: '(?i)\bNPI[:\s#]*(\d{10})\b'
+    group: 1
+    score: 0.90
+
+  - id: dob_medical
+    label: DATE
+    regex: '(?i)\b(?:DOB|date\s+of\s+birth|born)[:\s]+(\d{1,2}[\/\-]\d{1,2}[\/\-](?:19|20)\d{2})\b'
+    group: 1
+    score: 0.90
+    validator: date_validator
+
+  - id: admission_date
+    label: DATE
+    regex: '(?i)\b(?:admission|admit(?:ted)?|discharge)[:\s]+(\d{1,2}[\/\-]\d{1,2}[\/\-](?:19|20)\d{2})\b'
+    group: 1
+    score: 0.85
+    validator: date_validator
+
+# Boosts adjacent NER PERSON scores by +0.1 when these strings appear nearby
+title_cues: ["Dr.", "MD", "RN", "Nurse", "Patient", "Physician", "Attending"]

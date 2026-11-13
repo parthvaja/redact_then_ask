@@ -1,0 +1,125 @@
+# ============================================================
+# Common rule pack — always applied regardless of document type
+# ============================================================
+# These rules cover universally-structured PII that appears
+# in all document types: email addresses, phone numbers, SSNs,
+# credit cards, IBANs, IP addresses, URLs, and generic dates.
+#
+# Regex patterns use Python re syntax.  group: N means capture
+# group N is the actual PII span (0 = full match).
+# score is the base confidence before validation.
+
+id: common
+
+patterns:
+  # -- Email -------------------------------------------------------
+  - id: email_basic
+    label: EMAIL
+    regex: '\b[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}\b'
+    group: 0
+    score: 0.85
+    validator: email_validator
+
+  # -- SSN (US Social Security Number) ----------------------------
+  - id: ssn_dashes
+    label: SSN
+    regex: '\b(?!000|666|9\d{2})\d{3}-(?!00)\d{2}-(?!0000)\d{4}\b'
+    group: 0
+    score: 0.95
+    validator: ssn_validator
+
+  - id: ssn_nodash
+    label: SSN
+    regex: '\b(?!000|666|9\d{2})(?!000000000)(?!123456789)\d{9}\b'
+    group: 0
+    score: 0.60
+    validator: ssn_validator
+
+  # -- Credit card numbers -----------------------------------------
+  - id: credit_card
+    label: CREDIT_CARD
+    regex: '\b(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12})\b'
+    group: 0
+    score: 0.90
+    validator: luhn_validator
+
+  - id: credit_card_spaced
+    label: CREDIT_CARD
+    regex: '\b(?:\d{4}[\s\-]){3}\d{4}\b'
+    group: 0
+    score: 0.75
+    validator: luhn_validator
+
+  # -- IBAN --------------------------------------------------------
+  - id: iban
+    label: IBAN
+    regex: '\b[A-Z]{2}\d{2}[A-Z0-9]{4}\d{7}(?:[A-Z0-9]?){0,16}\b'
+    group: 0
+    score: 0.85
+    validator: iban_validator
+
+  # -- IP address --------------------------------------------------
+  - id: ipv4
+    label: IP_ADDRESS
+    regex: '\b(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\b'
+    group: 0
+    score: 0.90
+    validator: ip_validator
+
+  - id: ipv6
+    label: IP_ADDRESS
+    regex: '\b(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b'
+    group: 0
+    score: 0.90
+    validator: ip_validator
+
+  # -- URL ---------------------------------------------------------
+  - id: url_http
+    label: URL
+    regex: 'https?://[^\s<>"''{}|\\^`\[\]]+'
+    group: 0
+    score: 0.80
+
+  - id: url_bare
+    label: URL
+    regex: '\b(?:www\.|linkedin\.com|github\.com|twitter\.com|facebook\.com)[^\s<>"''{}|\\^`\[\]]*'
+    group: 0
+    score: 0.75
+
+  # -- Dates -------------------------------------------------------
+  - id: date_mdy_slash
+    label: DATE
+    regex: '\b(?:0?[1-9]|1[0-2])/(?:0?[1-9]|[12]\d|3[01])/(?:19|20)\d{2}\b'
+    group: 0
+    score: 0.80
+    validator: date_validator
+
+  - id: date_dmy_dash
+    label: DATE
+    regex: '\b(?:0?[1-9]|[12]\d|3[01])-(?:0?[1-9]|1[0-2])-(?:19|20)\d{2}\b'
+    group: 0
+    score: 0.75
+    validator: date_validator
+
+  - id: date_written
+    label: DATE
+    regex: '\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+(?:19|20)\d{2}\b'
+    group: 0
+    score: 0.85
+    validator: date_validator
+
+  # -- Age ---------------------------------------------------------
+  - id: age_year_old
+    label: AGE
+    regex: '\b(1[01]\d|[1-9]\d|\d)-?(?:year|yr)s?-?old\b'
+    group: 0
+    score: 0.85
+
+  - id: age_number
+    label: AGE
+    regex: '(?i)\bage[d:\s]+(?:of\s+)?(\b(?:1[01]\d|[1-9]\d|\d)\b)'
+    group: 1
+    score: 0.75
+
+# Optional title cues (not used by common pack, but parseable)
+title_cues: []

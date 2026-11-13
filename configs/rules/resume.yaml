@@ -1,0 +1,48 @@
+# ============================================================
+# Resume document rule pack
+# ============================================================
+# Applied when document type == "resume".
+# Supplements common.yaml with LinkedIn URLs, GitHub profiles,
+# portfolio links and address patterns common in resumes.
+
+id: resume
+
+patterns:
+  - id: linkedin_url
+    label: URL
+    regex: '(?i)(?:linkedin\.com/in/|linkedin\.com/pub/)[^\s<>"''{}|\\^`\[\]]+'
+    group: 0
+    score: 0.95
+
+  - id: github_url
+    label: URL
+    regex: '(?i)github\.com/[A-Za-z0-9\-]+'
+    group: 0
+    score: 0.90
+
+  - id: portfolio_url
+    label: URL
+    regex: '(?i)(?:portfolio|website|blog)[:\s]+https?://[^\s<>"''{}|\\^`\[\]]+'
+    group: 0
+    score: 0.80
+
+  - id: address_line
+    label: ADDRESS
+    regex: '\b\d{1,5}\s+[A-Za-z0-9\s]{3,40}(?:St(?:reet)?|Ave(?:nue)?|Blvd|Rd|Dr|Ln|Ct|Pl|Way)\b\.?'
+    group: 0
+    score: 0.70
+
+  - id: zip_code
+    label: ADDRESS
+    regex: '\b\d{5}(?:-\d{4})?\b'
+    group: 0
+    score: 0.60
+
+  - id: graduation_date
+    label: DATE
+    regex: '(?i)\b(?:graduated?|expected|conferred)[:\s]+(?:(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+)?(?:19|20)\d{2}\b'
+    group: 0
+    score: 0.75
+    validator: date_validator
+
+title_cues: ["Applicant", "Candidate", "References available upon request"]

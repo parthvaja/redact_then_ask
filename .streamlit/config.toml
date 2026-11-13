@@ -1,0 +1,18 @@
+[theme]
+# Visual identity from docs/PROJECT_DOC.md §10
+primaryColor       = "#0F9D8A"   # teal — primary actions, detected PII
+backgroundColor    = "#FFFFFF"   # white background
+secondaryBackgroundColor = "#EEF1F5"  # light panel
+textColor          = "#0E1726"   # ink — text, dark surfaces
+
+# Font: closest Streamlit supports is sans-serif; actual Inter/IBM Plex
+# fonts are loaded via injected CSS in app/style.css
+font               = "sans serif"
+
+[server]
+headless        = true
+enableCORS      = false
+enableXsrfProtection = true
+
+[browser]
+gatherUsageStats = false

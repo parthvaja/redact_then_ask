@@ -1,0 +1,67 @@
+/* Redact-Then-Ask — custom Streamlit styles
+   Full design is implemented in Phase 11.
+   Palette from docs/PROJECT_DOC.md §10:
+     Ink        #0E1726  (text, dark surfaces)
+     White      #FFFFFF  (background)
+     Panel      #EEF1F5  (light panel)
+     Teal       #0F9D8A  (primary actions, detected PII)
+     Amber      #F2A93B  (highlights, placeholders)
+     Muted      #5B6472  (secondary text)
+*/
+
+/* Hide default Streamlit chrome */
+#MainMenu { visibility: hidden; }
+footer { visibility: hidden; }
+header { visibility: hidden; }
+
+/* Body font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono&display=swap');
+
+html, body, [class*="css"] {
+    font-family: 'Inter', sans-serif;
+    color: #0E1726;
+}
+
+/* Code / document text */
+code, pre, .doc-text {
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+/* Redaction chip — black rounded chip with amber placeholder text */
+.redaction-chip {
+    display: inline-block;
+    background: #0E1726;
+    color: #F2A93B;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85em;
+    border-radius: 6px;
+    padding: 1px 6px;
+    margin: 0 1px;
+}
+
+/* PII highlight colours per label */
+.pii-PERSON      { background: rgba(15, 157, 138, 0.20); border-bottom: 2px solid #0F9D8A; }
+.pii-EMAIL       { background: rgba(242, 169, 59, 0.20);  border-bottom: 2px solid #F2A93B; }
+.pii-PHONE       { background: rgba(91, 100, 114, 0.20);  border-bottom: 2px solid #5B6472; }
+.pii-SSN         { background: rgba(220, 50,  50, 0.15);  border-bottom: 2px solid #DC3232; }
+.pii-CREDIT_CARD { background: rgba(220, 50,  50, 0.15);  border-bottom: 2px solid #DC3232; }
+.pii-DATE        { background: rgba(14,  23,  38, 0.08);  border-bottom: 2px solid #0E1726; }
+.pii-ADDRESS     { background: rgba(15, 157, 138, 0.10);  border-bottom: 2px solid #0F9D8A; }
+
+/* Card style */
+.rta-card {
+    background: #EEF1F5;
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Primary button override */
+.stButton > button[kind="primary"] {
+    background-color: #0F9D8A;
+    border-color: #0F9D8A;
+}
+.stButton > button[kind="primary"]:hover {
+    background-color: #0D8A79;
+    border-color: #0D8A79;
+}
