@@ -124,20 +124,54 @@ HF_NER_TO_LABEL: dict[str, str | None] = {
 # Mapping from ai4privacy dataset fields
 # ---------------------------------------------------------------------------
 
-#: ``pii_type`` values in the ai4privacy dataset → taxonomy label.
+#: ``privacy_mask[].label`` values in the ai4privacy/pii-masking-300k
+#: dataset → taxonomy label.  Verified against 500 streaming records
+#: on 2026-11-13.
 AI4PRIVACY_TO_LABEL: dict[str, str | None] = {
+    # --- Person names --------------------------------------------------
+    "GIVENNAME1": "PERSON",
+    "GIVENNAME2": "PERSON",
+    "LASTNAME1": "PERSON",
+    "LASTNAME2": "PERSON",
+    "LASTNAME3": "PERSON",
+    "USERNAME": "PERSON",  # treat usernames as PERSON for recall
+    "TITLE": None,  # honorific (Mr., Mrs.) — not PII on its own
+    # --- Contact -------------------------------------------------------
+    "EMAIL": "EMAIL",
+    "TEL": "PHONE",
+    "IP": "IP_ADDRESS",
+    "URL": "URL",
+    # --- Identifiers ---------------------------------------------------
+    "SOCIALNUMBER": "SSN",
+    "IDCARD": "ID_NUMBER",
+    "PASSPORT": "ID_NUMBER",
+    "DRIVERLICENSE": "ID_NUMBER",
+    # --- Location / address -------------------------------------------
+    "STREET": "ADDRESS",
+    "BUILDING": "ADDRESS",
+    "SECADDRESS": "ADDRESS",  # secondary address line
+    "POSTCODE": "ADDRESS",
+    "CITY": "LOCATION",
+    "STATE": "LOCATION",
+    "COUNTRY": "LOCATION",
+    "GEOCOORD": None,  # lat/lon coordinates — no taxonomy match
+    # --- Temporal ------------------------------------------------------
+    "DATE": "DATE",
+    "BOD": "DATE",  # date of birth
+    "TIME": None,  # time of day — not PII on its own
+    # --- Demographics --------------------------------------------------
+    "SEX": None,  # gender — quasi at best, not in taxonomy
+    "PASS": None,  # password — not PII in our taxonomy sense
+    # --- Kept from earlier guesses for robustness ---------------------
     "NAME_STUDENT": "PERSON",
     "NAME": "PERSON",
     "FULLNAME": "PERSON",
     "FIRSTNAME": "PERSON",
     "LASTNAME": "PERSON",
-    "USERNAME": "PERSON",  # treat usernames as PERSON for recall
-    "EMAIL": "EMAIL",
     "EMAILADDRESS": "EMAIL",
     "PHONE": "PHONE",
     "PHONENUMBER": "PHONE",
     "PHONE_NUM": "PHONE",
-    "TEL": "PHONE",
     "SSN": "SSN",
     "SOCIALSECURITYNUMBER": "SSN",
     "CREDITCARDNUMBER": "CREDIT_CARD",
@@ -145,24 +179,16 @@ AI4PRIVACY_TO_LABEL: dict[str, str | None] = {
     "IBAN": "IBAN",
     "BANKACCOUNT": "IBAN",
     "IPADDRESS": "IP_ADDRESS",
-    "IP": "IP_ADDRESS",
-    "URL": "URL",
     "WEBSITE": "URL",
-    "DATE": "DATE",
     "DATEOFBIRTH": "DATE",
     "DOB": "DATE",
     "AGE": "AGE",
     "ADDRESS": "ADDRESS",
     "STREETADDRESS": "ADDRESS",
     "ZIPCODE": "ADDRESS",
-    "CITY": "LOCATION",
-    "STATE": "LOCATION",
-    "COUNTRY": "LOCATION",
     "ORGANIZATION": "ORG",
     "COMPANY": "ORG",
     "IDNUMBER": "ID_NUMBER",
-    "PASSPORT": "ID_NUMBER",
-    "DRIVERLICENSE": "ID_NUMBER",
     "LICENSEPLATE": "ID_NUMBER",
     "TAXID": "ID_NUMBER",
     "MEDICALRECORD": "MRN",

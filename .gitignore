@@ -1,3 +1,7 @@
+# ---------- Claude Code ----------
+.claude/
+CLAUDE_CODE_PROMPT.md
+
 # ---------- Python ----------
 __pycache__/
 *.py[cod]
@@ -85,3 +89,10 @@ Thumbs.db
 *.mp4
 *.mov
 avatar_clips/
+
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+CLAUDE/
+CLAUDE_CODE_PROMPT.md
+.pre-commit-config.yaml

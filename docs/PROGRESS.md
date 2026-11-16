@@ -9,11 +9,11 @@ Status values: `TODO` · `IN PROGRESS` · `BLOCKED (reason)` · `DONE (commit sh
 | # | Phase | Priority | Status | Owner | Notes |
 |---|---|---|---|---|---|
 | 0 | Scaffold | MUST | DONE | Claude Code | |
-| 1 | Ingest + language ID | MUST | TODO | Member 1 | |
-| 2 | Data acquisition + gold conversion | MUST | TODO | Member 4 | |
-| 3 | Document classification | MUST | TODO | Member 1 | |
-| 4 | Regex detectors + validators | MUST | TODO | Member 2 | |
-| 5 | NER detector | MUST | TODO | Member 3 | |
+| 1 | Ingest + language ID | MUST | DONE | Claude Code | |
+| 2 | Data acquisition + gold conversion | MUST | DONE | Claude Code | |
+| 3 | Document classification | MUST | DONE | Claude Code | |
+| 4 | Regex detectors + validators | MUST | DONE | Claude Code | |
+| 5 | NER detector | MUST | DONE | Claude Code | |
 | 6 | Routing + type rule packs | MUST | TODO | Member 2 | |
 | 7 | Span resolution | MUST | TODO | Member 3 | |
 | 8 | Redaction + pseudonymization | MUST | TODO | Member 3 | |
@@ -58,12 +58,87 @@ Record any change to the design in `PROJECT_DOC.md` here with date and reason.
 | 2026-11-13 | Local LLM only (Ollama) | Keeps the privacy claim true end to end |
 | 2026-11-13 | Presidio as baseline | Shows improvement over an established tool instead of rebuilding it |
 | 2026-11-13 | Recall-first tie-breaking everywhere | A missed identifier is a breach; a false positive only costs readability |
+| 2026-11-13 | Relaxed pyproject.toml from `~=` to `>=` | pymupdf jumped to 2.x, pandas to 3.x, rich to 15.x since the initial pins; `>=` avoids install failures |
+| 2026-11-13 | Use `import pymupdf` not `import fitz` | `fitz` deprecated in pymupdf 2.x; FutureWarning at import |
+| 2026-11-13 | TAB: use annotator1, keep DIRECT+QUASI only | Consistent gold; NO_MASK entities are intentionally not anonymised |
+| 2026-11-13 | ai4privacy: `source_text` + `privacy_mask` fields | Verified by streaming first 500 records; field names differ from some documentation |
 
 ## Open issues
 
 _None yet._
 
 ## Session log
+
+### 2026-11-13, Phase 5 — NER detector
+
+- Did:
+  - `src/rta/detect/ner/__init__.py`: `run(doc)` dispatches to spaCy or HF backend based on config `detect.ner.backend`
+  - `src/rta/detect/ner/spacy_backend.py`: `detect(doc)` loads `en_core_web_trf` (fallback `en_core_web_lg`), maps entities via `SPACY_TO_LABEL`, sliding window (400 tokens/100 stride) for long docs, deduplicates
+  - `src/rta/detect/ner/hf_backend.py`: `detect(doc)` loads HF token-classification pipeline with `aggregation_strategy="simple"`, maps via `HF_NER_TO_LABEL`, char-based sliding window, min_score filtering
+  - `tests/test_ner.py`: 13 tests — spaCy detection (PERSON, ORG, GPE→LOCATION, unmapped label discard, alignment, dedup, model fallback), HF detection (entities, low-score filter, MISC discard), run() dispatch (spaCy, HF, invalid backend)
+- Tests: **184 passed** (13 new)
+- Decisions:
+  - spaCy entities get default score 0.85 since spaCy doesn't expose per-entity confidence
+  - Sliding window dedup by (start, end, label) tuple
+- Next: Phase 6 — Routing + type rule packs
+
+### 2026-11-13, Phase 4 — Regex detectors + validators
+
+- Did:
+  - `src/rta/detect/regex/validators.py`: 6 validators (email, ssn, luhn/credit-card, iban mod-97, ip address with loopback/link-local rejection, date multi-format); `VALIDATORS` registry dict for YAML lookup
+  - `src/rta/detect/regex/engine.py`: `RegexRule` dataclass, `_load_pack()` compiles YAML patterns and caches, `load_packs(doc_type)` loads common + type-specific pack, `_detect_phones()` via `phonenumbers.PhoneNumberMatcher`, `scan()` runs all rules with validation (validated→0.99, failed→drop unless keep_unvalidated)
+  - `src/rta/detect/regex/__init__.py`: `run(doc, doc_type)` public API wires up pack loading and scanning
+  - `tests/test_regex.py`: 38 tests — validators (22), rule loading (3), detection for each PII type (email, SSN, credit card, IP, URL, date, age, MRN, insurance ID), span alignment, phone detection
+- Tests: **171 passed** (38 new)
+- Decisions:
+  - Phone detection uses `phonenumbers` library (§6.5) instead of hand regex — more accurate for international formats
+  - Loopback/link-local IPs rejected as not PII
+  - All YAML rule packs load and compile successfully against real `configs/rules/*.yaml`
+- Next: Phase 5 — NER detector
+
+### 2026-11-13, Phase 3 — Document classification
+
+- Did:
+  - `src/rta/classify/corpus.py`: `build_corpus()` downloads ~300 docs per class from HF datasets (resume-atlas, CUAD, MTSamples, Enron emails) + TAB court cases; `strip_artifacts()` removes leakage cues (Enron headers, CUAD boilerplate); writes JSONL corpus
+  - `src/rta/classify/baseline.py`: `train_model()` builds TF-IDF + LR sklearn Pipeline (config-driven params), saves with joblib, writes metadata JSON; `predict_text()` loads cached model and returns (doc_type, probs); `evaluate_model()` reproduces the same stratified split and runs classification report; handles sklearn ≥1.7 removing `multi_class` param
+  - `src/rta/classify/__init__.py`: `predict(doc)` wraps baseline and populates `doc.meta` with `doc_type` and `type_probs`; `train()` auto-builds corpus if missing; `evaluate()` delegates to baseline
+  - `tests/test_classify.py`: 13 tests — strip_artifacts (4), train+predict (3), evaluate (1), predict wrapper (1), train integration (1), court_case loader (2), build_corpus (1)
+- Tests: **133 passed** (13 new)
+- Decisions:
+  - sklearn ≥1.7 removed `multi_class` from LogisticRegression; code introspects signature to stay compatible
+  - Leakage-guard strips Enron headers and CUAD boilerplate via regex before training; both raw and stripped corpora can be built
+  - HF dataset sources: `ahmedheakl/resume-atlas`, `theatticusproject/cuad`, `mteb/mtsamples`, `yangwang825/enron-email-corpus`
+- Next: Phase 4 — Regex detectors + validators
+
+### 2026-11-13, Phase 2 — Data acquisition + gold conversion
+
+- Did:
+  - `src/rta/data/ai4privacy.py`: `fetch()` downloads from HF, `convert()` streams, filters English, maps 27 label types via `AI4PRIVACY_TO_LABEL`, writes `GoldDoc` JSONL
+  - `src/rta/data/tab.py`: `fetch()` downloads 3 splits from GitHub, `convert()` parses TAB JSON, uses annotator1 DIRECT+QUASI mentions, maps via `TAB_TO_LABEL`
+  - Updated `src/rta/taxonomy.py`: `AI4PRIVACY_TO_LABEL` now covers all 27 real labels (GIVENNAME1, LASTNAME1, BOD, BUILDING, SOCIALNUMBER, etc.) verified from 500 streaming records
+  - `tests/test_data.py`: 9 tests — both loaders with mock data, label filtering, NO_MASK exclusion, annotator fallback, max_docs caps, missing-file handling
+- Tests: **120 passed** (9 new)
+- Decisions:
+  - ai4privacy fields verified by streaming inspection — `privacy_mask[].label` not `pii_type`; `source_text` not `text`
+  - TAB: `annotations` is `{annotator_id: {entity_mentions: [...]}}`, not a flat list; use `annotator1`; skip `identifier_type == "NO_MASK"`
+  - Relaxed pyproject.toml version pins from `~=` to `>=` to accommodate current PyPI packages
+- Next: Phase 3 — Document classification
+
+### 2026-11-13, Phase 1 — Ingest + language detection
+
+- Did:
+  - `src/rta/ingest/normalize.py`: Unicode NFC, line-ending unification, horizontal whitespace collapsing
+  - `src/rta/ingest/pdf.py`: pymupdf 2.x (`import pymupdf`), page-by-page extraction, `\n\n` join, char-range tracking, empty-page warning
+  - `src/rta/ingest/docx_loader.py`: python-docx, paragraphs + table cells in reading order
+  - `src/rta/ingest/txt.py`: charset-normalizer encoding detection
+  - `src/rta/ingest/__init__.py`: `load()` dispatcher by extension, plain-string wrapping, sha256 doc_id
+  - `src/rta/langid/__init__.py`: lingua wrapper, ISO→Language mapping (34 languages), cached detector, `detect()` sets `doc.meta` keys, low-confidence warning
+  - `tests/conftest.py`: fixture generators for PDF and DOCX (programmatic via pymupdf/python-docx), config+langid reset
+  - `tests/fixtures/sample.txt`: English paragraph with fictional PII
+  - `tests/test_ingest.py`: 29 tests (normalization, load string/txt/pdf/docx, page ranges, unsupported ext)
+  - `tests/test_langid.py`: 7 tests (English, Spanish, meta population, low-confidence flag)
+- Tests: **111 passed** (35 new)
+- Next: Phase 2
 
 ### 2026-11-13, Phase 0 — Scaffold
 

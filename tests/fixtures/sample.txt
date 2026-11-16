@@ -1,0 +1,13 @@
+Dear Mr. John Smith,
+
+We are writing to confirm your appointment at Springfield Medical Center
+on January 15, 2025.  Your patient ID is P-482910 and your date of birth
+is recorded as 03/22/1988.
+
+Please contact us at (555) 867-5309 or email jsmith@example.com if you
+need to reschedule.
+
+Regards,
+Dr. Emily Watson
+Springfield Medical Center
+742 Evergreen Terrace, Springfield, IL 62704

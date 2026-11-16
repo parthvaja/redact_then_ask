@@ -6,7 +6,12 @@
       "Bash(.venv/Scripts/python.exe -m pip install --upgrade pip -q)",
       "Bash(.venv/Scripts/pytest tests/ -v --tb=short)",
       "Bash(.venv/Scripts/ruff check:*)",
-      "Bash(.venv/Scripts/ruff format:*)"
+      "Bash(.venv/Scripts/ruff format:*)",
+      "Bash(.venv/Scripts/python -c ':*)",
+      "Bash(.venv/Scripts/python:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(.venv/Scripts/pytest tests/test_data.py -v --tb=short)"
     ]
   }
 }

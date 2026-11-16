@@ -1,11 +1,17 @@
-"""Regex-based PII detection.
+"""Regex-based PII detection (Phase 4).
 
-Implemented in Phase 4.
+Loads rule packs from ``configs/rules/``, compiles patterns, validates
+matches, and returns unresolved ``Span`` objects.
 """
 
 from __future__ import annotations
 
+import logging
+
+from rta.detect.regex.engine import load_packs, reset_cache, scan
 from rta.schema import Document, Span
+
+logger = logging.getLogger(__name__)
 
 
 def run(doc: Document, doc_type: str | None = None) -> list[Span]:
@@ -17,8 +23,11 @@ def run(doc: Document, doc_type: str | None = None) -> list[Span]:
 
     Returns:
         Unresolved ``Span`` list with ``detector`` starting with ``"regex:"``.
-
-    Raises:
-        NotImplementedError: Until Phase 4 is complete.
     """
-    raise NotImplementedError("rta.detect.regex.run — implemented in Phase 4")
+    rules = load_packs(doc_type=doc_type)
+    spans = scan(doc, rules)
+    logger.info("Regex detection: %d spans from %d rules", len(spans), len(rules))
+    return spans
+
+
+__all__ = ["load_packs", "reset_cache", "run", "scan"]
