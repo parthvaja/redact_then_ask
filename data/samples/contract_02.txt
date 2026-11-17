@@ -1,0 +1,17 @@
+CONSULTING AGREEMENT
+Reference: CASE-2024-11503
+Effective Date: October 15, 2024
+
+Between: Apex Data Solutions, Inc., with principal offices at 8900 Technology Parkway, Suite 210, Columbia, MD 21046 ("Consultant"), and Robert M. Vasquez, residing at 334 Birchwood Terrace, Ellicott City, MD 21043 ("Client").
+
+1. SERVICES. Consultant shall provide data migration and analytics platform implementation services for the Client's existing customer relationship management system.
+
+2. DURATION. This Agreement is effective from October 15, 2024 through April 14, 2025.
+
+3. FEES. Client agrees to pay Consultant $72,000 in monthly installments of $12,000.
+
+4. NOTICES. Electronic notices: robert.vasquez@techinbox.com.
+
+Signed on behalf of the parties:
+Consultant: Nina Chen, CEO, Apex Data Solutions, Inc.
+Client: Robert M. Vasquez

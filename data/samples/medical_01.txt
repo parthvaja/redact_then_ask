@@ -1,0 +1,13 @@
+DISCHARGE SUMMARY
+Patient: Margaret Ellen Sullivan  DOB: 03/15/1958  Age: 66
+MRN: MRN-7842193  Phone: (410) 555-0173
+Address: 2847 Windmill Lane, Towson, MD 21204
+Attending Physician: Dr. Samuel R. Okonkwo
+
+Date of Admission: 09/02/2024  Date of Discharge: 09/08/2024
+
+Diagnosis: Acute exacerbation of chronic obstructive pulmonary disease (COPD) with right lower lobe pneumonia.
+
+Hospital Course: The patient was admitted through the emergency department with worsening dyspnea and productive cough. Chest X-ray confirmed right lower lobe consolidation. She was started on IV ceftriaxone and azithromycin. Supplemental oxygen was provided via nasal cannula at 2L/min. Symptoms improved steadily over the course of six days.
+
+Discharge Medications: Prednisone 40mg daily taper, Albuterol inhaler 2 puffs q4h PRN, Azithromycin 250mg PO daily x3 days.

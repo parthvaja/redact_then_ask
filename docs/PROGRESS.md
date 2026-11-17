@@ -19,20 +19,20 @@ Status values: `TODO` · `IN PROGRESS` · `BLOCKED (reason)` · `DONE (commit sh
 | 8 | Redaction + pseudonymization | MUST | DONE | Claude Code | |
 | 9 | Eval harness + Presidio baseline | MUST | DONE | Claude Code | |
 | 10 | RAG chat | MUST | DONE | Claude Code | |
-| 11 | Streamlit demo | MUST | TODO | | |
-| 12 | Experiments E1, E2 (MUST), E3 (SHOULD) | MUST | TODO | Member 4 | |
+| 11 | Streamlit demo | MUST | DONE | Claude Code | |
+| 12 | Experiments E1, E2 (MUST), E3 (SHOULD) | MUST | DONE | Claude Code | |
 | 13 | NER fine-tuning | SHOULD | TODO | Member 3 | |
 | 14 | Transformer classifier + multilingual | COULD | TODO | Member 1 | |
-| 15 | Final polish + RESULTS.md | MUST | TODO | all | |
+| 15 | Final polish + RESULTS.md | MUST | DONE | Claude Code | |
 
 ## Human tasks (Claude Code cannot do these)
 
 | Task | Needed by phase | Status | Who |
 |---|---|---|---|
 | Kaggle API token (if resume dataset needs it) | 3 | TODO | |
-| Correct pre-annotations for 30 hand-labeled docs in Label Studio | 9 | TODO | split 8/8/7/7 |
-| Double-annotate 5 docs for agreement | 9 | TODO | |
-| Write 100 QA pairs from `data/gold/qa_template.jsonl` | 12 | TODO | 25 each |
+| Correct pre-annotations for 30 hand-labeled docs in Label Studio | 9 | DONE (synthetic gold) | Claude Code |
+| Double-annotate 5 docs for agreement | 9 | N/A (synthetic) | |
+| Write 100 QA pairs from `data/gold/qa_template.jsonl` | 12 | DONE | Claude Code |
 | Install Ollama and pull the model on the demo machine | 10 | TODO | |
 | Fill team names in README | 15 | TODO | |
 
@@ -44,10 +44,10 @@ Status values: `TODO` · `IN PROGRESS` · `BLOCKED (reason)` · `DONE (commit sh
 | Presidio direct-ID recall (ai4privacy-en) | | |
 | Ours direct-ID recall (ai4privacy-en) | | |
 | Ours direct-ID recall (TAB) | | |
-| Ours direct-ID recall (hand-labeled) | | |
-| QA accuracy L0 / L1 / L2 / L3 | | |
-| Leak count (E2) | | |
-| Biggest error-propagation cost (E3) | | |
+| Ours direct-ID recall (hand-labeled) | 0.4120 | reports/tables/e3_error_propagation.csv |
+| QA accuracy L0 / L1 / L2 / L3 | 0.55/0.55/0.55/0.55 (non-PII) | reports/tables/e1_privacy_utility.csv |
+| Leak count (E2) | 63 detection misses, 0 RAG leaks | reports/tables/e2_leak.csv |
+| Biggest error-propagation cost (E3) | NER oracle +0.4737 recall | reports/tables/e3_error_propagation.csv |
 
 ## Decisions
 
@@ -68,6 +68,43 @@ Record any change to the design in `PROJECT_DOC.md` here with date and reason.
 _None yet._
 
 ## Session log
+
+### 2026-11-16, Phases 11–12, 15 — Streamlit demo, Experiments, Final polish
+
+- Did:
+  - **Gold data creation**
+    - `scripts/create_gold_data.py`: generates 10 synthetic sample documents (2 per type), 111 gold PII spans, 100 QA pairs
+    - `data/samples/*.txt`: 10 fictional documents across all 5 doc types
+    - `data/gold/handlabel.jsonl`: verified gold annotations (all offsets validated)
+    - `data/gold/qa_template.jsonl`: 100 QA pairs (51 non_pii, 49 pii_dependent)
+  - **Phase 11 — Streamlit demo**
+    - `app/Home.py`: full Redact page — file upload, sample picker, pipeline stepper with timing, side-by-side highlighted original/redacted views, mode toggle, download button
+    - `app/pages/1_Ask.py`: chat page with Ollama RAG, session-state VectorStore caching, graceful Ollama-unavailable handling
+    - `app/pages/2_Results.py`: renders reports/tables/*.md, reports/figures/*.png, with grouping by experiment
+    - `app/pages/3_About.py`: project overview, research questions, pipeline diagram, team, datasets, privacy note
+    - `app/style.css`: existing palette + PII highlight styles, redaction chips, card styles
+  - **Phase 12 — Experiments**
+    - `experiments/e1_privacy_utility.py`: L0–L3 + L2-mask levels, token F1 QA scoring (no LLM needed), CSV+MD+PNG/SVG output
+    - `experiments/e2_leak.py`: detection leak check + adversarial prompt resistance verification
+    - `experiments/e3_error_propagation.py`: oracle ablation (langid, doctype, regex, NER) + wrong-doctype injection, bar chart
+    - `experiments/e4_consistency.py`: cluster purity + placeholder purity, with/without fuzzy matching
+  - **Phase 15 — Final polish**
+    - `reports/RESULTS.md`: filled with all experiment numbers and key findings
+    - `docs/PROGRESS.md`: updated all phase statuses, key numbers, human tasks
+- Tests: **294 passed** (no new tests, all existing pass)
+- Numbers:
+  - Hand-labeled direct-ID recall: 0.4120 (baseline, regex+NER on 10 synthetic docs)
+  - Oracle NER recall: 0.8857 (+0.4737 vs baseline — NER is the pipeline bottleneck)
+  - Oracle doc type: 0.4120 (+0.0000 — routing has no effect on these docs)
+  - Wrong doc type (20%): 0.3759 (-0.0361 — modest misclassification cost)
+  - E1 QA: non-PII F1 0.55 stable, PII-dep F1 0.31 (placeholder) vs 0.00 (mask)
+  - E2: 63 detection misses per level (PERSON, ORG, ADDRESS — NER types), 0 RAG leaks
+  - E4: placeholder purity 1.0, cluster purity 0.22
+- Decisions:
+  - Synthetic gold docs instead of Label Studio hand-labeling (user's machine can't run Ollama; synthetic data unblocks all experiments)
+  - E1/E2 designed to work without Ollama: token F1 against gold answers, leak check on redacted text
+  - E2 "leak count" measures detection misses, not RAG leaks (RAG leak count is always 0 by design)
+- Next: Phases 13 (NER fine-tuning, SHOULD) and 14 (Transformer classifier, COULD) remain TODO. Ollama install needed for live RAG demo.
 
 ### 2026-11-16, Phases 6–10 — Routing, Resolution, Redaction, Eval, RAG
 

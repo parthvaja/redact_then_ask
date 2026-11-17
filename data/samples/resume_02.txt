@@ -1,0 +1,24 @@
+ELENA MARIA PETROV
+1038 Harbor View Court, Annapolis, MD 21401
+elena.petrov@mailhub.org | (240) 555-0342
+Portfolio: https://elenapetrov.dev/portfolio
+
+SUMMARY
+Full-stack software engineer with 5 years of experience in web application development. Skilled in React, Node.js, TypeScript, and PostgreSQL.
+
+WORK EXPERIENCE
+Software Engineer II, Clearpath Digital, Annapolis, MD
+January 2021 - Present
+- Led migration of monolithic PHP application to microservices.
+- Implemented CI/CD pipelines reducing deployment time by 75%.
+
+Junior Developer, Bayside Software Co., Columbia, MD
+August 2019 - December 2020
+- Developed REST APIs serving 500K daily requests.
+- Created automated testing suite with 92% code coverage.
+
+EDUCATION
+B.S. Computer Science, University of Maryland, College Park, 2019
+
+CERTIFICATIONS
+AWS Certified Solutions Architect - Associate, March 2022

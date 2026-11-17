@@ -1,2 +1,100 @@
-{"qa_id": "med_01_q1", "doc_id": "med_01", "question": "Which medication was the patient prescribed?", "answer": "", "answer_type": "non_pii", "notes": ""}
-{"qa_id": "med_01_q2", "doc_id": "med_01", "question": "Who is the treating physician?", "answer": "", "answer_type": "pii_dependent", "notes": ""}
+{"qa_id": "med_01_q01", "doc_id": "medical_01", "question": "What was the patient diagnosed with?", "answer": "Acute exacerbation of chronic obstructive pulmonary disease (COPD) with right lower lobe pneumonia.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "med_01_q02", "doc_id": "medical_01", "question": "What is the patient's name?", "answer": "[PERSON_1]", "answer_type": "pii_dependent", "notes": "Patient name is PII"}
+{"qa_id": "med_01_q03", "doc_id": "medical_01", "question": "How was the pneumonia confirmed?", "answer": "Chest X-ray confirmed right lower lobe consolidation.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "med_01_q04", "doc_id": "medical_01", "question": "Who is the attending physician?", "answer": "[PERSON_2]", "answer_type": "pii_dependent", "notes": "Doctor name is PII"}
+{"qa_id": "med_01_q05", "doc_id": "medical_01", "question": "What antibiotics were administered during the hospital stay?", "answer": "IV ceftriaxone and azithromycin.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "med_01_q06", "doc_id": "medical_01", "question": "What is the patient's date of birth?", "answer": "[DATE_1]", "answer_type": "pii_dependent", "notes": "DOB is PII"}
+{"qa_id": "med_01_q07", "doc_id": "medical_01", "question": "How long was the patient hospitalized?", "answer": "Six days.", "answer_type": "non_pii", "notes": "Duration derivable from text without exact dates"}
+{"qa_id": "med_01_q08", "doc_id": "medical_01", "question": "What is the patient's medical record number?", "answer": "[MRN_1]", "answer_type": "pii_dependent", "notes": "MRN is PII"}
+{"qa_id": "med_01_q09", "doc_id": "medical_01", "question": "What supplemental oxygen was provided?", "answer": "Nasal cannula at 2L/min.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "med_01_q10", "doc_id": "medical_01", "question": "What is the patient's phone number?", "answer": "[PHONE_1]", "answer_type": "pii_dependent", "notes": "Phone is PII"}
+{"qa_id": "med_02_q01", "doc_id": "medical_02", "question": "What procedure was performed?", "answer": "Open right inguinal hernia repair with mesh (Lichtenstein technique).", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "med_02_q02", "doc_id": "medical_02", "question": "What is the patient's name?", "answer": "[PERSON_1]", "answer_type": "pii_dependent", "notes": "Patient name is PII"}
+{"qa_id": "med_02_q03", "doc_id": "medical_02", "question": "What type of mesh material was used?", "answer": "A polypropylene mesh was placed and secured with interrupted 2-0 Prolene sutures.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "med_02_q04", "doc_id": "medical_02", "question": "Who performed the surgery?", "answer": "[PERSON_2]", "answer_type": "pii_dependent", "notes": "Surgeon name is PII"}
+{"qa_id": "med_02_q05", "doc_id": "medical_02", "question": "What was the estimated blood loss?", "answer": "25 mL.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "med_02_q06", "doc_id": "medical_02", "question": "When was the procedure performed?", "answer": "[DATE_3]", "answer_type": "pii_dependent", "notes": "Procedure date is PII"}
+{"qa_id": "med_02_q07", "doc_id": "medical_02", "question": "What was the preoperative diagnosis?", "answer": "Right inguinal hernia, recurrent.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "med_02_q08", "doc_id": "medical_02", "question": "Where does the patient live?", "answer": "[ADDRESS_1]", "answer_type": "pii_dependent", "notes": "Address is PII"}
+{"qa_id": "med_02_q09", "doc_id": "medical_02", "question": "Were there any complications during the procedure?", "answer": "No complications. The patient tolerated the procedure well.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "med_02_q10", "doc_id": "medical_02", "question": "What is the patient's medical record number?", "answer": "[MRN_1]", "answer_type": "pii_dependent", "notes": "MRN is PII"}
+{"qa_id": "con_01_q01", "doc_id": "contract_01", "question": "What services will the Provider deliver?", "answer": "Market research and competitive analysis services as described in Exhibit A.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "con_01_q02", "doc_id": "contract_01", "question": "Who is the Client named in this agreement?", "answer": "[PERSON_1]", "answer_type": "pii_dependent", "notes": "Client name is PII"}
+{"qa_id": "con_01_q03", "doc_id": "contract_01", "question": "What is the total compensation amount?", "answer": "$45,000, payable in three equal installments.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "con_01_q04", "doc_id": "contract_01", "question": "What company is the Provider?", "answer": "[ORG_1]", "answer_type": "pii_dependent", "notes": "Company name is PII"}
+{"qa_id": "con_01_q05", "doc_id": "contract_01", "question": "When does this agreement terminate?", "answer": "[DATE_3]", "answer_type": "pii_dependent", "notes": "Date is PII"}
+{"qa_id": "con_01_q06", "doc_id": "contract_01", "question": "How many installments is the payment divided into?", "answer": "Three equal installments.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "con_01_q07", "doc_id": "contract_01", "question": "What is the agreement number?", "answer": "[CASE_NUMBER_1]", "answer_type": "pii_dependent", "notes": "Case number is PII"}
+{"qa_id": "con_01_q08", "doc_id": "contract_01", "question": "Where should all notices be sent?", "answer": "[EMAIL_1]", "answer_type": "pii_dependent", "notes": "Email is PII"}
+{"qa_id": "con_01_q09", "doc_id": "contract_01", "question": "Can this agreement be extended?", "answer": "Yes, by mutual written consent.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "con_01_q10", "doc_id": "contract_01", "question": "Who signed as the Managing Partner for the Provider?", "answer": "[PERSON_2]", "answer_type": "pii_dependent", "notes": "Person name is PII"}
+{"qa_id": "con_02_q01", "doc_id": "contract_02", "question": "What services will the Consultant provide?", "answer": "Data migration and analytics platform implementation services for the Client's existing customer relationship management system.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "con_02_q02", "doc_id": "contract_02", "question": "Who is the Client?", "answer": "[PERSON_1]", "answer_type": "pii_dependent", "notes": "Client name is PII"}
+{"qa_id": "con_02_q03", "doc_id": "contract_02", "question": "What is the monthly payment amount?", "answer": "$12,000.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "con_02_q04", "doc_id": "contract_02", "question": "What is the total contract value?", "answer": "$72,000.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "con_02_q05", "doc_id": "contract_02", "question": "Who is the CEO of the consulting firm?", "answer": "[PERSON_2]", "answer_type": "pii_dependent", "notes": "Person name is PII"}
+{"qa_id": "con_02_q06", "doc_id": "contract_02", "question": "When does the agreement end?", "answer": "[DATE_3]", "answer_type": "pii_dependent", "notes": "Date is PII"}
+{"qa_id": "con_02_q07", "doc_id": "contract_02", "question": "What type of system is being migrated?", "answer": "Customer relationship management system.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "con_02_q08", "doc_id": "contract_02", "question": "What is the reference number for this agreement?", "answer": "[CASE_NUMBER_1]", "answer_type": "pii_dependent", "notes": "Case number is PII"}
+{"qa_id": "con_02_q09", "doc_id": "contract_02", "question": "Where are the Consultant's offices located?", "answer": "[ADDRESS_1]", "answer_type": "pii_dependent", "notes": "Address is PII"}
+{"qa_id": "con_02_q10", "doc_id": "contract_02", "question": "How is the total fee structured?", "answer": "In monthly installments of $12,000.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "res_01_q01", "doc_id": "resume_01", "question": "How many years of experience does the candidate have?", "answer": "8 years.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "res_01_q02", "doc_id": "resume_01", "question": "What is the candidate's name?", "answer": "[PERSON_1]", "answer_type": "pii_dependent", "notes": "Candidate name is PII"}
+{"qa_id": "res_01_q03", "doc_id": "resume_01", "question": "What programming languages is the candidate proficient in?", "answer": "Python, SQL, Apache Spark, and AWS.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "res_01_q04", "doc_id": "resume_01", "question": "What is the candidate's email address?", "answer": "[EMAIL_1]", "answer_type": "pii_dependent", "notes": "Email is PII"}
+{"qa_id": "res_01_q05", "doc_id": "resume_01", "question": "By how much did the candidate reduce query latency?", "answer": "60% through partition optimization.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "res_01_q06", "doc_id": "resume_01", "question": "Where does the candidate currently work?", "answer": "[ORG_1]", "answer_type": "pii_dependent", "notes": "Company name is PII"}
+{"qa_id": "res_01_q07", "doc_id": "resume_01", "question": "What degree did the candidate earn from UMBC?", "answer": "M.S. Computer Science.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "res_01_q08", "doc_id": "resume_01", "question": "What is the candidate's home address?", "answer": "[ADDRESS_1]", "answer_type": "pii_dependent", "notes": "Address is PII"}
+{"qa_id": "res_01_q09", "doc_id": "resume_01", "question": "How many events per day does the streaming pipeline process?", "answer": "2M events per day.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "res_01_q10", "doc_id": "resume_01", "question": "What is the candidate's LinkedIn URL?", "answer": "[URL_1]", "answer_type": "pii_dependent", "notes": "URL is PII"}
+{"qa_id": "res_02_q01", "doc_id": "resume_02", "question": "How many years of experience does the candidate have?", "answer": "5 years.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "res_02_q02", "doc_id": "resume_02", "question": "What is the candidate's name?", "answer": "[PERSON_1]", "answer_type": "pii_dependent", "notes": "Candidate name is PII"}
+{"qa_id": "res_02_q03", "doc_id": "resume_02", "question": "What technologies is the candidate skilled in?", "answer": "React, Node.js, TypeScript, and PostgreSQL.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "res_02_q04", "doc_id": "resume_02", "question": "What is the candidate's email address?", "answer": "[EMAIL_1]", "answer_type": "pii_dependent", "notes": "Email is PII"}
+{"qa_id": "res_02_q05", "doc_id": "resume_02", "question": "By how much did CI/CD pipelines reduce deployment time?", "answer": "75%.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "res_02_q06", "doc_id": "resume_02", "question": "Where is the candidate currently employed?", "answer": "[ORG_1]", "answer_type": "pii_dependent", "notes": "Company name is PII"}
+{"qa_id": "res_02_q07", "doc_id": "resume_02", "question": "What was the code coverage of the automated testing suite?", "answer": "92%.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "res_02_q08", "doc_id": "resume_02", "question": "What is the candidate's phone number?", "answer": "[PHONE_1]", "answer_type": "pii_dependent", "notes": "Phone is PII"}
+{"qa_id": "res_02_q09", "doc_id": "resume_02", "question": "What certification does the candidate hold?", "answer": "AWS Certified Solutions Architect - Associate.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "res_02_q10", "doc_id": "resume_02", "question": "What is the candidate's portfolio URL?", "answer": "[URL_1]", "answer_type": "pii_dependent", "notes": "URL is PII"}
+{"qa_id": "eml_01_q01", "doc_id": "email_01", "question": "What was discussed at the meeting last Thursday?", "answer": "Blue Line Logistics' proposal for the mid-Atlantic distribution expansion.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "eml_01_q02", "doc_id": "email_01", "question": "Who sent this email?", "answer": "[PERSON_1]", "answer_type": "pii_dependent", "notes": "Sender name is PII"}
+{"qa_id": "eml_01_q03", "doc_id": "email_01", "question": "What attachments are included?", "answer": "Revised cost projections and the draft SLA.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "eml_01_q04", "doc_id": "email_01", "question": "Who is the email addressed to?", "answer": "[PERSON_2]", "answer_type": "pii_dependent", "notes": "Recipient name is PII"}
+{"qa_id": "eml_01_q05", "doc_id": "email_01", "question": "What is the sender's title?", "answer": "Director of Strategic Partnerships.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "eml_01_q06", "doc_id": "email_01", "question": "Who should be contacted to schedule the follow-up call?", "answer": "[PERSON_3]", "answer_type": "pii_dependent", "notes": "Assistant name is PII"}
+{"qa_id": "eml_01_q07", "doc_id": "email_01", "question": "What is the deadline for sending comments?", "answer": "[DATE_3]", "answer_type": "pii_dependent", "notes": "Date is PII"}
+{"qa_id": "eml_01_q08", "doc_id": "email_01", "question": "What company does the sender work for?", "answer": "[ORG_1]", "answer_type": "pii_dependent", "notes": "Company name is PII"}
+{"qa_id": "eml_01_q09", "doc_id": "email_01", "question": "What is the subject of this email?", "answer": "Q3 Partnership Review.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "eml_01_q10", "doc_id": "email_01", "question": "What type of expansion is being discussed?", "answer": "Mid-Atlantic distribution expansion.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "eml_02_q01", "doc_id": "email_02", "question": "What type of collaboration is being proposed?", "answer": "A 12-month joint research initiative on federated learning.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "eml_02_q02", "doc_id": "email_02", "question": "Who sent this email?", "answer": "[PERSON_1]", "answer_type": "pii_dependent", "notes": "Sender name is PII"}
+{"qa_id": "eml_02_q03", "doc_id": "email_02", "question": "What novel approach has the sender's team developed?", "answer": "A novel approach to federated learning.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "eml_02_q04", "doc_id": "email_02", "question": "Who is the recipient of this email?", "answer": "[PERSON_2]", "answer_type": "pii_dependent", "notes": "Recipient name is PII"}
+{"qa_id": "eml_02_q05", "doc_id": "email_02", "question": "What is the sender's title?", "answer": "VP of Research.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "eml_02_q06", "doc_id": "email_02", "question": "Which university is involved in the proposed collaboration?", "answer": "[ORG_2]", "answer_type": "pii_dependent", "notes": "University name is PII"}
+{"qa_id": "eml_02_q07", "doc_id": "email_02", "question": "When would the research initiative begin?", "answer": "[DATE_2]", "answer_type": "pii_dependent", "notes": "Date is PII"}
+{"qa_id": "eml_02_q08", "doc_id": "email_02", "question": "What department at the university is mentioned?", "answer": "Artificial intelligence research lab.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "eml_02_q09", "doc_id": "email_02", "question": "Who else will join the proposed call?", "answer": "[PERSON_3]", "answer_type": "pii_dependent", "notes": "Colleague name is PII"}
+{"qa_id": "eml_02_q10", "doc_id": "email_02", "question": "What is the subject line of this email?", "answer": "Research Collaboration Proposal.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "crt_01_q01", "doc_id": "court_case_01", "question": "What type of claim was wrongfully denied?", "answer": "Long-term disability claim.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "crt_01_q02", "doc_id": "court_case_01", "question": "Who is the Plaintiff?", "answer": "[PERSON_1]", "answer_type": "pii_dependent", "notes": "Plaintiff name is PII"}
+{"qa_id": "crt_01_q03", "doc_id": "court_case_01", "question": "What statute did the Defendant violate?", "answer": "29 U.S.C. 1133.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "crt_01_q04", "doc_id": "court_case_01", "question": "Who is the presiding judge?", "answer": "[PERSON_3]", "answer_type": "pii_dependent", "notes": "Judge name is PII"}
+{"qa_id": "crt_01_q05", "doc_id": "court_case_01", "question": "What was the ruling on the Defendant's motion for summary judgment?", "answer": "DENIED.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "crt_01_q06", "doc_id": "court_case_01", "question": "What is the civil action number?", "answer": "[CASE_NUMBER_1]", "answer_type": "pii_dependent", "notes": "Case number is PII"}
+{"qa_id": "crt_01_q07", "doc_id": "court_case_01", "question": "What court is hearing this case?", "answer": "United States District Court, District of Maryland.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "crt_01_q08", "doc_id": "court_case_01", "question": "Who is the Defendant?", "answer": "[ORG_1]", "answer_type": "pii_dependent", "notes": "Company name is PII"}
+{"qa_id": "crt_01_q09", "doc_id": "court_case_01", "question": "What did the Defendant's denial letter fail to do?", "answer": "Failed to comply with the notice requirements of 29 U.S.C. 1133.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "crt_01_q10", "doc_id": "court_case_01", "question": "In which exhibit was the Plaintiff's Social Security number referenced?", "answer": "Sealed Exhibit 3.", "answer_type": "non_pii", "notes": "Exhibit number is not PII"}
+{"qa_id": "crt_02_q01", "doc_id": "court_case_02", "question": "What type of legal action is this?", "answer": "Medical malpractice action.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "crt_02_q02", "doc_id": "court_case_02", "question": "Who is the Plaintiff?", "answer": "[PERSON_1]", "answer_type": "pii_dependent", "notes": "Plaintiff name is PII"}
+{"qa_id": "crt_02_q03", "doc_id": "court_case_02", "question": "What procedure is alleged to have been negligently performed?", "answer": "A spinal fusion procedure.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "crt_02_q04", "doc_id": "court_case_02", "question": "Who is the presiding judge?", "answer": "[PERSON_3]", "answer_type": "pii_dependent", "notes": "Judge name is PII"}
+{"qa_id": "crt_02_q05", "doc_id": "court_case_02", "question": "What ruling did the Court make on the motion to compel?", "answer": "Granted.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "crt_02_q06", "doc_id": "court_case_02", "question": "What is the case number?", "answer": "[CASE_NUMBER_1]", "answer_type": "pii_dependent", "notes": "Case number is PII"}
+{"qa_id": "crt_02_q07", "doc_id": "court_case_02", "question": "What court is hearing this case?", "answer": "Circuit Court for Baltimore County, State of Maryland.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "crt_02_q08", "doc_id": "court_case_02", "question": "Who is the Defendant?", "answer": "[ORG_1]", "answer_type": "pii_dependent", "notes": "Company name is PII"}
+{"qa_id": "crt_02_q09", "doc_id": "court_case_02", "question": "What was the ruling on the motion to dismiss?", "answer": "Denied.", "answer_type": "non_pii", "notes": ""}
+{"qa_id": "crt_02_q10", "doc_id": "court_case_02", "question": "What documents does the Plaintiff want produced?", "answer": "The operative notes.", "answer_type": "non_pii", "notes": ""}

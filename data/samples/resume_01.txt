@@ -1,0 +1,22 @@
+DAVID ALEXANDER BROOKS
+4521 Riverside Terrace, Baltimore, MD 21230
+david.brooks@protonmail.com | (443) 555-0187
+LinkedIn: https://linkedin.com/in/davidabrooks
+
+PROFESSIONAL SUMMARY
+Data engineer with 8 years of experience designing scalable ETL pipelines and cloud data warehouses. Proficient in Python, SQL, Apache Spark, and AWS.
+
+EXPERIENCE
+Senior Data Engineer, Meridian Analytics Corp., Baltimore, MD
+June 2019 - Present
+- Architected a real-time streaming pipeline processing 2M events/day.
+- Reduced query latency by 60% through partition optimization.
+
+Data Engineer, NovaBridge Technologies, Reston, VA
+March 2016 - May 2019
+- Built ETL workflows using Apache Airflow and Spark on EMR.
+- Migrated 15TB legacy Oracle database to Amazon Redshift.
+
+EDUCATION
+M.S. Computer Science, University of Maryland, Baltimore County, 2016
+B.S. Mathematics, Towson University, 2014
