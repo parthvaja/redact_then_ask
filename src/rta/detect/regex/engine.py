@@ -86,15 +86,19 @@ def _load_pack(pack_path: Path) -> list[RegexRule]:
     return rules
 
 
-def load_packs(doc_type: str | None = None, min_conf: float | None = None) -> list[RegexRule]:
-    """Load the appropriate rule packs for *doc_type*.
+def load_packs(
+    doc_type: str | None = None,
+    doc_types: list[str] | None = None,
+) -> list[RegexRule]:
+    """Load the appropriate rule packs.
 
-    Always loads ``common.yaml``.  If *doc_type* is given, also loads the
-    matching type pack.
+    Always loads ``common.yaml``.  If *doc_types* is given, loads packs for
+    all listed types (deduplicated).  Otherwise falls back to the single
+    *doc_type*.
 
     Args:
-        doc_type:  Predicted document type (e.g. ``"medical"``).
-        min_conf:  Not used here (routing logic is in the caller).
+        doc_type:  Single predicted document type (e.g. ``"medical"``).
+        doc_types: Multiple types from routing (overrides *doc_type*).
 
     Returns:
         Flattened list of all compiled rules.
@@ -109,13 +113,22 @@ def load_packs(doc_type: str | None = None, min_conf: float | None = None) -> li
     if common_path.exists():
         all_rules.extend(_load_pack(common_path))
 
-    # Load doc-type pack
-    if doc_type:
-        type_path = rule_dir / f"{doc_type}.yaml"
-        if type_path.exists():
-            all_rules.extend(_load_pack(type_path))
-        else:
-            logger.debug("No rule pack for doc_type=%s at %s", doc_type, type_path)
+    # Determine which type packs to load
+    types_to_load: list[str] = []
+    if doc_types is not None:
+        types_to_load = doc_types
+    elif doc_type:
+        types_to_load = [doc_type]
+
+    seen: set[str] = set()
+    for dt in types_to_load:
+        if dt not in seen:
+            seen.add(dt)
+            type_path = rule_dir / f"{dt}.yaml"
+            if type_path.exists():
+                all_rules.extend(_load_pack(type_path))
+            else:
+                logger.debug("No rule pack for doc_type=%s at %s", dt, type_path)
 
     return all_rules
 

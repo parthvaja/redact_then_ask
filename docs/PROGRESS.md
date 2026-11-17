@@ -14,11 +14,11 @@ Status values: `TODO` · `IN PROGRESS` · `BLOCKED (reason)` · `DONE (commit sh
 | 3 | Document classification | MUST | DONE | Claude Code | |
 | 4 | Regex detectors + validators | MUST | DONE | Claude Code | |
 | 5 | NER detector | MUST | DONE | Claude Code | |
-| 6 | Routing + type rule packs | MUST | TODO | Member 2 | |
-| 7 | Span resolution | MUST | TODO | Member 3 | |
-| 8 | Redaction + pseudonymization | MUST | TODO | Member 3 | |
-| 9 | Eval harness + Presidio baseline | MUST | TODO | Member 4 | |
-| 10 | RAG chat | MUST | TODO | Member 4 | |
+| 6 | Routing + type rule packs | MUST | DONE | Claude Code | |
+| 7 | Span resolution | MUST | DONE | Claude Code | |
+| 8 | Redaction + pseudonymization | MUST | DONE | Claude Code | |
+| 9 | Eval harness + Presidio baseline | MUST | DONE | Claude Code | |
+| 10 | RAG chat | MUST | DONE | Claude Code | |
 | 11 | Streamlit demo | MUST | TODO | | |
 | 12 | Experiments E1, E2 (MUST), E3 (SHOULD) | MUST | TODO | Member 4 | |
 | 13 | NER fine-tuning | SHOULD | TODO | Member 3 | |
@@ -68,6 +68,43 @@ Record any change to the design in `PROJECT_DOC.md` here with date and reason.
 _None yet._
 
 ## Session log
+
+### 2026-11-16, Phases 6–10 — Routing, Resolution, Redaction, Eval, RAG
+
+- Did:
+  - **Phase 6 — Routing + type rule packs**
+    - `src/rta/detect/rules.py`: `for_type()` routing decision (single pack if conf >= 0.6, top-k fallback), `get_title_cues()` loads cues from YAML packs, `boost_ner_scores()` boosts NER PERSON spans +0.1 near title cues
+    - Updated `src/rta/detect/regex/engine.py`: `load_packs()` now accepts `doc_types` list for multi-pack loading
+    - Updated `src/rta/pipeline.py`: detect stages now use routing and title-cue boosting
+    - `tests/test_rules.py`: 24 tests
+  - **Phase 7 — Span resolution**
+    - `src/rta/resolve/__init__.py`: `merge()` implements all 6 rules from §6.7 — same-label union (rule 3), validated-wins (rule 1), label precedence for exact range (rule 2), longer-wins for partial overlap (rule 4), min_score filtering (rule 5), whitespace/punctuation trimming (rule 6); greedy priority-based selection within overlap groups
+    - `tests/test_resolve.py`: 17 tests including property test (no overlaps in output)
+  - **Phase 8 — Redaction + pseudonymization**
+    - `src/rta/redact/cluster.py`: `cluster_spans()` with 4-step matching — exact normalised match, token containment, initials (J. Smith → John Smith), fuzzy via rapidfuzz (token_set_ratio ≥ 90); `normalize_mention()` strips titles/possessives; digits-only normalisation for PHONE/SSN/CREDIT_CARD/IBAN
+    - `src/rta/redact/surrogates.py`: `generate_surrogate()` with seeded Faker for consistent fake values per cluster
+    - `src/rta/redact/__init__.py`: `apply()` supports mask/placeholder/fake modes; builds offset_map for original↔redacted alignment
+    - `tests/test_redact.py`: 22 tests
+  - **Phase 9 — Eval harness + Presidio baseline**
+    - `src/rta/eval/match.py`: `match_strict()`, `match_overlap()`, `match_token()` matching modes
+    - `src/rta/eval/metrics.py`: `precision_recall_f1()`, `f_beta()` (F2), `per_label_metrics()` with micro/macro, `leak_rate()`, `bootstrap_ci()` (1000 resamples)
+    - `src/rta/eval/presidio_baseline.py`: `run_presidio()` wraps Presidio with taxonomy mapping
+    - `src/rta/eval/report.py`: `generate_report()` writes CSV + Markdown, `generate_comparison_table()` for multi-system comparison
+    - `src/rta/eval/__init__.py`: `score()` public API for experiments, `run_evaluation()` CLI entry point
+    - `tests/test_eval.py`: 30 tests
+  - **Phase 10 — RAG chat**
+    - `src/rta/rag/chunk.py`: `chunk_text()` splits at sentence boundaries (pysbd, with regex fallback) with configurable overlap
+    - `src/rta/rag/index.py`: `VectorStore` wrapping ChromaDB with sentence-transformers embeddings
+    - `src/rta/rag/llm.py`: `chat()` calls Ollama HTTP API with proper error handling
+    - `src/rta/rag/prompts.py`: `SYSTEM_PROMPT` with privacy rules, `build_rag_prompt()` templates
+    - `src/rta/rag/__init__.py`: `index()` and `answer()` public API
+    - `tests/test_rag.py`: 17 tests (all external deps mocked)
+- Tests: **294 passed** (110 new: 24 rules + 17 resolve + 22 redact + 30 eval + 17 rag)
+- Decisions:
+  - Greedy priority selection for cross-label overlap resolution: sort by (validated, length, precedence, score), pick greedily — avoids complex pairwise tournament while respecting all 4 resolution rules
+  - Mention clustering uses `importlib.util.find_spec` for rapidfuzz availability check to avoid unused-import lint
+  - Defensive bounds check in `_trim_span` for spans that could extend beyond text length
+- Next: Phase 11 — Streamlit demo
 
 ### 2026-11-13, Phase 5 — NER detector
 

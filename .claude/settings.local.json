@@ -11,7 +11,12 @@
       "Bash(.venv/Scripts/python:*)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "WebFetch(domain:github.com)",
-      "Bash(.venv/Scripts/pytest tests/test_data.py -v --tb=short)"
+      "Bash(.venv/Scripts/pytest tests/test_data.py -v --tb=short)",
+      "mcp__claude_ai_Claude_Docs__guide",
+      "Bash(make test:*)",
+      "mcp__claude_ai_Claude_Docs__batch",
+      "mcp__claude_ai_Claude_Docs__update",
+      "mcp__claude_ai_Claude_Docs__read"
     ]
   }
 }

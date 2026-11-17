@@ -14,17 +14,22 @@ from rta.schema import Document, Span
 logger = logging.getLogger(__name__)
 
 
-def run(doc: Document, doc_type: str | None = None) -> list[Span]:
+def run(
+    doc: Document,
+    doc_type: str | None = None,
+    doc_types: list[str] | None = None,
+) -> list[Span]:
     """Run all regex detectors on *doc*.
 
     Args:
-        doc:      An ingested ``Document``.
-        doc_type: Predicted document type, used to select rule packs.
+        doc:       An ingested ``Document``.
+        doc_type:  Single predicted document type.
+        doc_types: Multiple types from routing (overrides *doc_type*).
 
     Returns:
         Unresolved ``Span`` list with ``detector`` starting with ``"regex:"``.
     """
-    rules = load_packs(doc_type=doc_type)
+    rules = load_packs(doc_type=doc_type, doc_types=doc_types)
     spans = scan(doc, rules)
     logger.info("Regex detection: %d spans from %d rules", len(spans), len(rules))
     return spans

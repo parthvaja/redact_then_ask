@@ -124,18 +124,29 @@ class Pipeline:
         result.doc_type, result.type_probs = self._run_classify(result.document)
         result.timings["classify"] = time.perf_counter() - t0
 
-        # --- Stage: detect (regex + NER) ------------------------------------
+        # --- Stage: detect (regex + NER) with routing (Phase 6) ---------------
         t0 = time.perf_counter()
-        result.spans_regex = self._run_detect_regex(result.document, result.doc_type)
+        result.spans_regex = self._run_detect_regex(
+            result.document,
+            result.doc_type,
+            result.type_probs,
+        )
         result.timings["detect_regex"] = time.perf_counter() - t0
 
         t0 = time.perf_counter()
-        result.spans_ner = self._run_detect_ner(result.document)
+        result.spans_ner = self._run_detect_ner(
+            result.document,
+            result.doc_type,
+            result.type_probs,
+        )
         result.timings["detect_ner"] = time.perf_counter() - t0
 
         # --- Stage: resolve --------------------------------------------------
         t0 = time.perf_counter()
-        result.spans_merged = self._run_resolve(result.spans_regex + result.spans_ner)
+        result.spans_merged = self._run_resolve(
+            result.spans_regex + result.spans_ner,
+            result.document.text,
+        )
         result.timings["resolve"] = time.perf_counter() - t0
 
         # --- Stage: redact ---------------------------------------------------
@@ -178,26 +189,48 @@ class Pipeline:
 
         return predict(doc)
 
-    def _run_detect_regex(self, doc: Document, doc_type: str | None) -> list[Span]:
+    def _run_detect_regex(
+        self,
+        doc: Document,
+        doc_type: str | None,
+        type_probs: dict[str, float] | None = None,
+    ) -> list[Span]:
         if "detect_regex" in self.overrides:
             return self.overrides["detect_regex"](doc, doc_type)
         from rta.detect.regex import run as regex_run
+        from rta.detect.rules import for_type
 
-        return regex_run(doc, doc_type)
+        doc_types = for_type(doc_type, type_probs)
+        return regex_run(doc, doc_types=doc_types)
 
-    def _run_detect_ner(self, doc: Document) -> list[Span]:
+    def _run_detect_ner(
+        self,
+        doc: Document,
+        doc_type: str | None = None,
+        type_probs: dict[str, float] | None = None,
+    ) -> list[Span]:
         if "detect_ner" in self.overrides:
             return self.overrides["detect_ner"](doc)
         from rta.detect.ner import run as ner_run
+        from rta.detect.rules import boost_ner_scores, for_type, get_title_cues
 
-        return ner_run(doc)
+        spans = ner_run(doc)
+        doc_types = for_type(doc_type, type_probs)
+        title_cues = get_title_cues(doc_types)
+        if title_cues:
+            spans = boost_ner_scores(spans, doc.text, title_cues)
+        return spans
 
-    def _run_resolve(self, spans: list[Span]) -> list[Span]:
+    def _run_resolve(
+        self,
+        spans: list[Span],
+        doc_text: str | None = None,
+    ) -> list[Span]:
         if "resolve" in self.overrides:
             return self.overrides["resolve"](spans)
         from rta.resolve import merge
 
-        return merge(spans)
+        return merge(spans, doc_text=doc_text)
 
     def _run_redact(self, doc: Document, spans: list[Span]) -> RedactionResult:
         if "redact" in self.overrides:
